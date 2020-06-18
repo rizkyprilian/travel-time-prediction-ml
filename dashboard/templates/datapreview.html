@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row mt-5">
+    <div class="col">
+        <h2>{{title}}</h2>
+        <hr/>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="toolbar"></div>
+        <table
+            id="table"
+            data-toggle="true"
+            data-toolbar="#toolbar"
+            data-search="true"
+            data-show-columns="true"
+            data-pagination="true"
+            data-height="500">
+        </table>
+    </div>
+</div>
+
+<script type='text/javascript'>
+
+    $(window).on('load', function(){
+      var data = {{data|tojson}};
+      var columns = {{columns|tojson}};
+
+      $(function() {
+        $('#table').bootstrapTable({ 
+          data: data,
+          columns: columns,
+        });
+
+      });
+
+    });
+  </script>
+
+{% endblock %}

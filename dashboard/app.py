@@ -10,10 +10,14 @@ with open('dataset.json') as json_file:
     data = json.load(json_file)
 
 
-
 @app.route('/')
+def home():
+    return render_template('home.html')
+
+
+@app.route('/dataset')
 def datapreview():
-    
+
     columns = [
         {
             "field": "device_id", # which is the field's name of data key 
@@ -127,3 +131,5 @@ def datapreview():
 if __name__ == '__main__':
     model = joblib.load('model_elasticnet')
     app.run(debug=True)
+    # server = Server(app.wsgi_app)
+    # server.serve()

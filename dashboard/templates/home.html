@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <h1>Travel Time Prediction based on Historical GPS Trajectory Data</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-2">
+    <div class="container-fluid">
+        <img src="{{ url_for('static', filename='hero-banner.jpg') }}" class="img-fluid" alt="Responsive image">
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="container">
+
+        <div class="row">
+            <div class="col">
+                <h2>Overview</h2>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-8">
+                <p>
+                    Billions of amounts of money are lost in the road traffic worldwide every day. In logistic world, being able to predict travel time would enable drivers and fleet managers to plan route, promised delivery time, resource which could potentially reduce the amounts of hours lost in traffic and generating more delivery volume.
+                </p>
+                <p>
+                    In simple mathematical way, time spent on the road depends on the distance travelled and average speed. However due to the complexity of the road conditions such as traffic congestion, busy intersections, bridges, tunnels, type of roads (highway, motorway, city-lane) might affect the overall time required to finish a trip. Tracking all these factors manually would become very hard. Luckily, the rise of affordable consumer grade GPS receiver allows companies to track their vehicle online. 
+                </p>
+                <p>
+                    In this project, I’d like to experiment to use historical gps data trajectory recorded from gps receiver installed in vehicles and combined it with external map data, then we can try to use machine learning algorithm to predict trip duration
+                </p>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-8">
+                <h2>GPS Data</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8">
+                <img src="{{ url_for('static', filename='how-gps-works.gif') }}" class="img-fluid" alt="Responsive image">
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-8">
+                <p>
+                    GPS (Global Positioning System) is the satellite navigation system that provides location and time data in all weather conditions by way of four or more satellites for the aim of detecting position of the GPS receiver in any accessible line of vision around the globe. The GPS system, which was first introduced for military purposes, was made available to civil use following downing of a passenger airplane having veered far from its normal course with 269 people on board in 1983. GPS systems are currently used in many fields from airplanes to mobile phones, from vehicle tracking systems to navigation systems and to mapping.
+                </p>
+                <p>
+                    With its simplest definition, a vehicle tracking system is the system that allows tracking and controlling of vehicles via an online computer, smart phone, tablet, etc. on a 7/24 basis thanks to GPS satellites. Vehicle tracking systems make it possible to have an instantaneous and history tracking of vehicle speeds, the routes they followed, on maps providing a registry and check point with past and present reports.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="container">
+        
+    </div>
+</div>
+
+
+{% endblock %}

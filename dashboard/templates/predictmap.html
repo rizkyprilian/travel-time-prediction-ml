@@ -1,0 +1,406 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="row justify-content-center h-100 mt-2">
+        <div class="col-12">
+            <div class="h-100 d-flex flex-column">
+                <div class="row justify-content-center flex-grow-1">
+                    <div id="map"></div>
+                    <div class="info-box">
+                        <div id="info">
+                          <p>Draw your route using the draw tools on the right.</p>
+                        </div>
+                        <div id="form" id="time-form">
+                            <div class="form-group">
+                                <label for="datetimepicker3">Select time of Departure</label>
+                                <div class="input-group date" id="datetimepicker3" data-target-input="nearest">
+                                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker3"/>
+                                    <div class="input-group-append" data-target="#datetimepicker3" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fas fa-clock"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="cta">Get ETA Prediction</button>
+                        </div>
+                        <div id="prediction-result" class="mt-2">
+                            
+                        </div>
+                        <div id="directions" class="mt-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Le mapbox script yo -->
+
+    <!-- Import Mapbox GL JS  -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js'></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.js'></script>
+
+    <!-- Here I wrote an inline script. Hahahahaha -->
+    <script>
+
+        // Add your Mapbox access token
+        mapboxgl.accessToken = '{{mapbox_access_token}}';
+        var map = new mapboxgl.Map({
+            container: 'map', // Specify the container ID
+            style: 'mapbox://styles/mapbox/streets-v11', // Specify which map style to use
+            center: [106.8259048461914,-6.177078291310942], // Specify the starting position
+            zoom: 12, // Specify the starting zoom
+        });
+
+
+        var draw = new MapboxDraw({
+            // Instead of showing all the draw tools, show only the line string and delete tools
+            displayControlsDefault: false,
+            controls: {
+                line_string: true,
+                trash: true
+            },
+            styles: [
+                // Set the line style for the user-input coordinates
+                {
+                "id": "gl-draw-line",
+                "type": "line",
+                "filter": ["all", ["==", "$type", "LineString"],
+                    ["!=", "mode", "static"]
+                ],
+                "layout": {
+                    "line-cap": "round",
+                    "line-join": "round"
+                },
+                "paint": {
+                    "line-color": "#438EE4",
+                    "line-dasharray": [0.2, 2],
+                    "line-width": 4,
+                    "line-opacity": 0.7
+                }
+                },
+                // Style the vertex point halos
+                {
+                "id": "gl-draw-polygon-and-line-vertex-halo-active",
+                "type": "circle",
+                "filter": ["all", ["==", "meta", "vertex"],
+                    ["==", "$type", "Point"],
+                    ["!=", "mode", "static"]
+                ],
+                "paint": {
+                    "circle-radius": 12,
+                    "circle-color": "#FFF"
+                }
+                },
+                // Style the vertex points
+                {
+                "id": "gl-draw-polygon-and-line-vertex-active",
+                "type": "circle",
+                "filter": ["all", ["==", "meta", "vertex"],
+                    ["==", "$type", "Point"],
+                    ["!=", "mode", "static"]
+                ],
+                "paint": {
+                    "circle-radius": 8,
+                    "circle-color": "#438EE4",
+                }
+                },
+            ]
+        });
+
+        // Add the draw tool to the map
+        map.addControl(draw);
+
+        function updateRoute() {
+            // Set the profile
+            var profile = "driving";
+            // Get the coordinates that were drawn on the map
+            var data = draw.getAll();
+            var lastFeature = data.features.length - 1;
+            var coords = data.features[lastFeature].geometry.coordinates;
+            // Format the coordinates
+            var newCoords = coords.join(';')
+            // Set the radius for each coordinate pair to 25 meters
+            var radius = [];
+            coords.forEach(element => {
+                radius.push(25);
+            });
+            getMatch(newCoords, radius, profile);
+        }
+
+        var currentlySelectedRoute = null;
+
+        left_regex = /\bleft\b/
+        right_regex = /\bright\b/
+        uturn_regex = /\buturn\b/
+        straight_regex = /\bstraight\b/
+
+        function processMapMatchingResult(matching){
+
+            var data = {
+                n_intersections: 0,
+                n_tolls: 0,
+                n_bridges: 0,
+                n_tunnels: 0,
+                n_motorways: 0,
+                n_steps: 0,
+                n_left_turns: 0,
+                n_right_turns: 0,
+                n_u_turns: 0,
+                n_go_straight: 0,
+                distance: matching.distance || 0,
+                avg_speed: 0,
+                max_speed: 0
+            }
+
+            var speed = [];
+
+            matching.legs.forEach(function(leg){
+
+                // steps
+                if (leg.hasOwnProperty('annotation')){
+                    if(leg.annotation.hasOwnProperty('speed')) {
+                        speed = speed.concat(leg.annotation.speed);
+                    }
+                }  
+
+                if (leg.hasOwnProperty('steps')){
+                    data.n_steps += leg.steps.length;
+                    
+                    leg.steps.forEach(function(step){
+
+                        if (step.hasOwnProperty('intersections')){
+                            data.n_intersections += step.intersections.length;
+
+                            // get n_tolls, n_bridges, n_tunnels, n_motorways
+                            step.intersections.forEach(function(intersection){
+                                // console.log(intersection);
+                                
+                                if (intersection.hasOwnProperty('classes')){
+
+                                    if (intersection.classes.includes('toll')) {
+                                        data.n_tolls += 1
+                                    }
+
+                                    if (intersection.classes.includes('bridge')) {
+                                        data.n_bridges += 1
+                                    }  
+
+                                    if (intersection.classes.includes('tunnels')) {
+                                        data.n_tunnels += 1
+                                    }
+
+                                    if (intersection.classes.includes('motorway')) {
+                                        data.n_motorways += 1
+                                    }
+
+                                }
+                            })
+
+                            if (step.hasOwnProperty('maneuver')) {
+                                if(step.maneuver.hasOwnProperty('modifier')){
+                                    mod_ = step.maneuver.modifier;
+
+                                    if (left_regex.test(mod_)){
+                                        data.n_left_turns += 1;
+                                    }
+
+                                    if (right_regex.test(mod_)){
+                                        data.n_right_turns += 1;
+                                    }
+
+                                    if (uturn_regex.test(mod_)){
+                                        data.n_u_turns += 1;
+                                    }
+
+                                    if (straight_regex.test(mod_)){
+                                        data.n_go_straight += 1;
+                                    }
+                                }
+                                
+                            }
+
+                        }
+
+                    });
+
+                }
+
+                
+            });
+            
+
+            if (speed.length > 0){
+                data.avg_speed = speed.reduce((a,b) => a + b, 0) / speed.length;
+                data.max_speed = Math.max.apply(Math, speed);;
+            }
+
+            // convert to km
+            data.distance = data.distance / 1000;
+            
+
+            currentlySelectedRoute = data;
+
+            param_preview = [];
+            Object.keys(currentlySelectedRoute).forEach(function(key){
+                param_preview.push('<li>'+ key + ' : ' + currentlySelectedRoute[key] + '</li>')
+            });
+
+            document.getElementById('directions').innerHTML = param_preview.join('');
+
+        }
+
+        // Make a Map Matching request
+        function getMatch(coordinates, radius, profile) {
+            // Separate the radiuses with semicolons
+            var radiuses = radius.join(';')
+            // Create the query
+            var query = 'https://api.mapbox.com/matching/v5/mapbox/' + profile + '/' + coordinates + '?geometries=geojson&radiuses=' + radiuses + '&steps=true&annotations=duration,distance,speed&access_token=' + mapboxgl.accessToken;
+
+            $.ajax({
+                method: 'GET',
+                url: query
+            }).done(function(data) {
+                // console.log(data);
+                
+                // Get the coordinates from the response
+                var coords = data.matchings[0].geometry;
+                // Draw the route on the map
+                addRoute(coords);
+                processMapMatchingResult(data.matchings[0]);
+                // getInstructions(data.matchings[0]);
+            });
+        }
+
+        // Draw the Map Matching route as a new layer on the map
+        function addRoute(coords) {
+            // If a route is already loaded, remove it
+            if (map.getSource('route')) {
+                map.removeLayer('route')
+                map.removeSource('route')
+            } else {
+                map.addLayer({
+                    "id": "route",
+                    "type": "line",
+                    "source": {
+                        "type": "geojson",
+                        "data": {
+                        "type": "Feature",
+                        "properties": {},
+                        "geometry": coords
+                        }
+                    },
+                    "layout": {
+                        "line-join": "round",
+                        "line-cap": "round"
+                    },
+                    "paint": {
+                        "line-color": "#03AA46",
+                        "line-width": 8,
+                        "line-opacity": 0.8
+                    }
+                });
+            };
+        }
+
+        function getInstructions(data) {
+            // Target the sidebar to add the instructions
+            var directions = document.getElementById('directions');
+
+            var legs = data.legs;
+            var tripDirections = [];
+            // Output the instructions for each step of each leg in the response object
+            for (var i = 0; i < legs.length; i++) {
+                var steps = legs[i].steps;
+                for (var j = 0; j < steps.length; j++) {
+                tripDirections.push('<br><li>' + steps[j].maneuver.instruction) + '</li>';
+                }
+            }
+            directions.innerHTML = tripDirections;
+        }
+
+        // If the user clicks the delete draw button, remove the layer if it exists
+        function removeRoute() {
+            if (map.getSource('route')) {
+                map.removeLayer('route');
+                map.removeSource('route');
+                currentlySelectedRoute = null;
+                document.getElementById('directions').innerHTML = '';
+                document.getElementById('prediction-result').innerHTML = '';
+            } else {
+                return;
+            }
+        }
+
+        map.on('draw.create', updateRoute);
+        map.on('draw.update', updateRoute);
+        map.on('draw.delete', removeRoute);
+    
+    </script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            
+            $('#datetimepicker3').datetimepicker({
+                defaultDate: moment.now()
+            });
+
+            $('#time-form').on('submit', function(event){
+                event.preventDefault()
+            });
+
+            $('#cta').on('click', function(){
+                timeselected = $('#datetimepicker3').datetimepicker('viewDate');
+                timesubmit = parseInt(timeselected.hour()) +(parseInt(timeselected.minute()) / 60);
+                daysubmit = parseInt(timeselected.day())
+
+                // momentjs time is based on sun-mon (0-6) while model day of week based on mon-sun
+
+                if (daysubmit==6){
+                    daysubmit = 0;
+                } else {
+                    daysubmit += 1;
+                }
+
+
+                if(currentlySelectedRoute==null){
+                    alert('Please draw a route first');
+                    return false;
+                }
+
+                currentlySelectedRoute.departure_hour = timesubmit;
+                currentlySelectedRoute.day_of_week = daysubmit;
+
+                var query = "{{ url_for('predict') }}";
+
+                $.ajax({
+                    method: 'POST',
+                    url: query,
+                    data: currentlySelectedRoute
+                }).done(function(data) {
+
+                    if (data.error){
+                        $('#prediction-result').html('<div class="alert alert-danger" role="alert"><strong>Error: </strong>'+data.error_message+'</div>');
+                    } else {
+
+                        est_travel_time = moment.duration(data.est_travel_time, 's');
+
+
+                        $('#prediction-result').html('<div class="alert alert-primary" role="alert"><strong>Travel Time: </strong>'+est_travel_time.humanize()+' ('+data.est_travel_time+'s)'+'</div>');
+                    }
+
+                    console.log(data);
+                });
+
+            });
+
+
+        });
+    </script>
+
+{% endblock %}

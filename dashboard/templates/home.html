@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="row mt-5">
+<div class="row mt-5 pt-2">
     <div class="container">
         <div class="row">
             <div class="col-4">
@@ -11,9 +11,12 @@
         </div>
     </div>
 </div>
-<div class="row mt-2">
+<div class="row mt-3">
     <div class="container-fluid">
-        <img src="{{ url_for('static', filename='hero-banner.jpg') }}" class="img-fluid" alt="Responsive image">
+        <figure class="figure">
+            <img src="{{ url_for('static', filename='hero-banner.jpg') }}" class="figure-img img-fluid rounded" alt="...">
+            <figcaption class="figure-caption text-center">Photo by <a href="https://unsplash.com/@zachinglis?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"> Zach Inglis </a> on <a href="https://unsplash.com">Unsplash</a></figcaption>
+          </figure>
     </div>
 </div>
 <div class="row mt-4">
@@ -40,18 +43,125 @@
 
         <div class="row mt-2">
             <div class="col-8">
-                <h2>GPS Data</h2>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-8">
-                <img src="{{ url_for('static', filename='how-gps-works.gif') }}" class="img-fluid" alt="Responsive image">
+                <h2>Business Use Case: Predictability</h2>
             </div>
         </div>
         <div class="row mt-2">
             <div class="col-8">
+                <p>Transport operators, delivery companies, supply chain managers are facing increasingly complex challenge to deliver in urban areas. Due to the rise of urban population and large amount of mobility, traffic congestion surged and has been causing significant delay in shipping time </p>
+                <p>While being under pressure to deliver a large volume of cargo everyday, transport operators also needs to always consider time factor. In 2016, World Bank released Logistic Performance Index report, and in that report it was stated that <b>predictability</b> is the main factor in keeping the performance index high.</p>
+                <p><b>There are few common strategy in tackling efficiency issue:</b></p>
+                <ol>
+                    <li>- Adapting vehicle size (Try to avoid unused capacity and road restriction)</li>
+                    <li>- Transshipment to smaller vehicles</li>
+                    <li>- Collaboration with public sector</li>
+                </ol>
+                <p> <b>Furthermore, in terms of delivery efficiency, there are several factor to consider:</b></p>
+                <ol>
+                    <li>- Time</li>
+                    <li>- Speed</li>
+                    <li>- Distance</li>
+                    <li>- Capacity</li>
+                </ol>
+                <p>Those factors above involving observation of time based data (Temporal) and spatial data. Thus, it often leads to study of GeoSpatial aspect of the business.</p>
+                <h3 class="mt-1">Utilization Measures</h3>
+                <ol>
+                    <li>- Loading</li>
+                    <li>- Vehicle Time</li>
+                    <li>- Empty Running</li>
+                    <li>- Deviation from schedule</li>
+                    <li>- Fuel Cost</li>
+                </ol>
+                <h3 class="mt-1">Internal Transport Efficiency Measures</h3>
+                <p>Apart from the external factors mentioned above, Transport operators also need to adjust and optimize internal aspect of their business process</p>
+                <h4>1. Driver Efficiency</h4>
+                <p>Maintaining high standard operational procedure leads to better safety score and eco-driving training.</p>
+                <h4>2. Vehicle Efficiency</h4>
+                <p>Increasing load factor and decreasing the number of empty kilometres.</p>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-8">
+                <h3>Typical Business Process</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8">
+                Typically, logistic companies cover type of trips as illutrated below:
+                <h4 class="mt-5 text-center">Single-point Delivery</h4>
+                <figure class="figure mt-4">
+                    <img src="{{ url_for('static', filename='Route-single-point.jpg' )}}" class="figure-img img-fluid rounded" alt="Single Point Delivery">
+                    <figcaption class="figure-caption text-center">Single point Delivery</figcaption>
+                </figure>
+
+                <h4 class="mt-5 text-center">Multi-point Delivery</h4>
+                <figure class="figure mt-4">
+                    <img src="{{ url_for('static', filename='Route-multi-point.jpg' )}}" class="figure-img img-fluid rounded" alt="Multi Point Delivery">
+                    <figcaption class="figure-caption text-center">Multi point Delivery</figcaption>
+                </figure>
+
+                <h4 class="mt-5 text-center">Round-trip Journey</h4>
+                <figure class="figure mt-4">
+                    <img src="{{ url_for('static', filename='round-trip.jpg' )}}" class="figure-img img-fluid rounded" alt="Round Trip Journey">
+                    <figcaption class="figure-caption text-center">Round Trip Journey</figcaption>
+                </figure>
+            </div>
+        </div>
+
+
+        <div class="row mt-5">
+            <div class="col-8">
+                <h2>Who benefits from this study?</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8">
+                <p>In this study, I'd like to conduct studying which factors contributes to travel time over distance of journey. There are two main audiences:</p>
+
+                <h4 class="mt-2">1. Business Owner and Fleet Managers</h4>
+                <p>An accurate ETA will boost the efficiency of the transportation system, reducing travel cost for the users, saving energy consumption and reducing motor vehicle pollution. Therefore, ETA has become a core component that influences decision-making</p>
+                <p>Other common question that could be addressed are:</p>
+                <p>- When is the most efficient time to deliver a package from point A to point B?</p>
+                <p>- Which route is most efficient but does not hurt SLA promise?</p>
+                <p>- Company need to know when each vehicles arrive at destination, so they can be scheduled for another trip (with load)</p>
+                <p>- Managing and analyzing tons of historical data is hard, company needs automation</p>
+
+                <h4 class="mt-2">2. Product Owner</h4>
+                <p>GPS receiver hardware keeps getting more affordable nowadays due to mass production by following market demands. However track and trace only feature might not be sufficient to target market (especially from B2B sector). Hiring talents to keep analyzing the tracking data manually are both time and cost inefficient.</p>
+                <p>Therefore, the system or software need to offer prediction feature as well to help customers make critical decision in points of times. </p>
+                
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-8">
+                <h2>Datasets</h2>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-8">
+                <p>The data used in this study was provided by Arvento Mobile System, one of the leading Fleet Telematics service provider. The data comes from Arvento's client (due to data privacy reason, I wouldn't be able disclose who this data belongs to). The company operates for retail market, and this data was used for their supply chain division. There are two main data components:</p>
+                <p>- <b>Region Travel (Trip) Report</b> which consist of records of region visit that can be used as trip segmentation.</p>
+                <p>- <b>Raw trajectory gps data</b> from 300+ vehicles that recorded from April 1st, 2020 to April 30th, 2020 (one month range). The trajectory has resolution up to 10s interval. When the vehicle stopped, it record at 60s interval</p>
+            </div>
+        </div>
+
+
+        <div class="row mt-2">
+            <div class="col-8">
+                <h4>GPS Data</h4>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-8">
+                <img src="{{ url_for('static', filename='how-gps-works.gif') }}" class="img-fluid" alt="Responsive image">
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-8">
                 <p>
-                    GPS (Global Positioning System) is the satellite navigation system that provides location and time data in all weather conditions by way of four or more satellites for the aim of detecting position of the GPS receiver in any accessible line of vision around the globe. The GPS system, which was first introduced for military purposes, was made available to civil use following downing of a passenger airplane having veered far from its normal course with 269 people on board in 1983. GPS systems are currently used in many fields from airplanes to mobile phones, from vehicle tracking systems to navigation systems and to mapping.
+                    GPS (Global Positioning System) is the satellite navigation system that provides location and time data in all weather conditions by way of four or more satellites for the aim of detecting position of the GPS receiver in any accessible line of vision around the globe.
                 </p>
                 <p>
                     With its simplest definition, a vehicle tracking system is the system that allows tracking and controlling of vehicles via an online computer, smart phone, tablet, etc. on a 7/24 basis thanks to GPS satellites. Vehicle tracking systems make it possible to have an instantaneous and history tracking of vehicle speeds, the routes they followed, on maps providing a registry and check point with past and present reports.
@@ -59,12 +169,148 @@
             </div>
         </div>
 
+        <div class="row mt-5">
+            <div class="col-8">
+                <h2>Methodology</h2>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-8">
+                <figure class="figure mt-4">
+                    <img src="{{ url_for('static', filename='methodology-ml.jpg' )}}" class="figure-img img-fluid rounded" alt="Methodology">
+                    <figcaption class="figure-caption text-center">Methodology Process</figcaption>
+                </figure>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-8">
+
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-8">
+                <h2>Machine Learning Model</h2>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-8">
+                <p>- Multiple Linear Regression</p>
+                <p>- Ridge</p>
+                <p>- Lasso</p>
+                <p>- ElasticNet</p>
+                <p>- PolynomialRegression</p>
+                <p>- SVR</p>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-8">
+                <h2>Model Evaluation</h2>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-8">
+                <p>
+                    The result is still considered as underfit to be implemented in production. There are more iteration work needed with below recommendation:
+                </p>
+                <p>- Reduce round trip sample, customer premise should be tagged or we can use clustering the raw trajectory (although it will took long time)</p>
+                <p>- Increase trip sampling for at least a year to see any correlation with time of the year (public holiday, important event)</p>
+                <p>- Add more trip features that can be inverred from historical gps data (lane count, congestion, pavement type)</p>
+                <p>- Apply model to each segment of the road. </p>
+                <p>- Add traffic data</p>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-8">
+            <table border="1" class="table">  <thead>    <tr style="text-align: right;">      <th></th>      <th>MAE</th>      <th>%MAPE</th>      <th>RMSE</th>      <th>%RMSPE</th>      <th>r2</th>    </tr>    <tr>      <th>name</th>      <th></th>      <th></th>      <th></th>      <th></th>      <th></th>    </tr>  </thead>  <tbody>    <tr>      <th>df_ptp_no_outlier_scaled_Lasso</th>      <td>311.723418</td>      <td>354.204308</td>      <td>608.258196</td>      <td>585.180145</td>      <td>0.12</td>    </tr>    <tr>      <th>df_ptp_no_outlier_Lasso</th>      <td>313.084564</td>      <td>356.989332</td>      <td>608.605151</td>      <td>589.729861</td>      <td>0.12</td>    </tr>    <tr>      <th>df_ptp_no_outlier_scaled_Ridge</th>      <td>313.690669</td>      <td>357.326240</td>      <td>608.755243</td>      <td>590.387690</td>      <td>0.12</td>    </tr>    <tr>      <th>df_ptp_no_outlier_Ridge</th>      <td>313.868820</td>      <td>357.734702</td>      <td>608.803726</td>      <td>591.060680</td>      <td>0.12</td>    </tr>    <tr>      <th>df_ptp_no_outlier_scaled_MLR</th>      <td>313.915856</td>      <td>357.775631</td>      <td>608.812118</td>      <td>591.126898</td>      <td>0.12</td>    </tr>    <tr>      <th>df_ptp_no_outlier_MLR</th>      <td>313.915856</td>      <td>357.775631</td>      <td>608.812118</td>      <td>591.126898</td>      <td>0.12</td>    </tr>    <tr>      <th>df_ptp_no_outlier_ElasticNet</th>      <td>297.613444</td>      <td>338.877243</td>      <td>611.448255</td>      <td>560.187984</td>      <td>0.11</td>    </tr>    <tr>      <th>df_ptp_no_outlier_scaled_ElasticNet</th>      <td>259.633790</td>      <td>248.642173</td>      <td>615.391757</td>      <td>390.205340</td>      <td>0.10</td>    </tr>    <tr>      <th>df_ptp_no_outlier_scaled_SGDRegressor</th>      <td>346.937379</td>      <td>423.431940</td>      <td>630.773260</td>      <td>708.343140</td>      <td>0.05</td>    </tr>    <tr>      <th>df_ptp_no_outlier_scaled_SVR</th>      <td>170.131969</td>      <td>49.580496</td>      <td>649.789128</td>      <td>81.584954</td>      <td>-0.00</td>    </tr>    <tr>      <th>df_ptp_no_outlier_SVR</th>      <td>182.884872</td>      <td>63.155671</td>      <td>654.840039</td>      <td>92.319079</td>      <td>-0.02</td>    </tr>    <tr>      <th>df_ptp_no_outlier_PolynomialRegression</th>      <td>441.038685</td>      <td>502.134005</td>      <td>747.598267</td>      <td>996.350471</td>      <td>-0.33</td>    </tr>    <tr>      <th>df_ptp_no_outlier_scaled_PolynomialRegression</th>      <td>441.033876</td>      <td>502.123318</td>      <td>747.615143</td>      <td>996.344817</td>      <td>-0.33</td>    </tr>    <tr>      <th>df_ptp_ElasticNet</th>      <td>428.512624</td>      <td>297.939703</td>      <td>1065.133767</td>      <td>520.922620</td>      <td>0.57</td>    </tr>    <tr>      <th>df_ptp_scaled_Lasso</th>      <td>430.480390</td>      <td>301.074996</td>      <td>1067.328630</td>      <td>527.897787</td>      <td>0.57</td>    </tr>    <tr>      <th>df_ptp_Lasso</th>      <td>432.034466</td>      <td>303.159562</td>      <td>1067.836304</td>      <td>531.688803</td>      <td>0.57</td>    </tr>    <tr>      <th>df_ptp_scaled_Ridge</th>      <td>432.157636</td>      <td>303.387946</td>      <td>1068.365624</td>      <td>532.161669</td>      <td>0.57</td>    </tr>    <tr>      <th>df_ptp_Ridge</th>      <td>432.377090</td>      <td>303.694071</td>      <td>1068.408449</td>      <td>532.712103</td>      <td>0.57</td>    </tr>    <tr>      <th>df_ptp_scaled_MLR</th>      <td>432.379737</td>      <td>303.699378</td>      <td>1068.414881</td>      <td>532.723316</td>      <td>0.57</td>    </tr>    <tr>      <th>df_ptp_MLR</th>      <td>432.379737</td>      <td>303.699378</td>      <td>1068.414881</td>      <td>532.723316</td>      <td>0.57</td>    </tr>    <tr>      <th>df_ptp_scaled_ElasticNet</th>      <td>394.307187</td>      <td>242.180790</td>      <td>1068.868205</td>      <td>390.521478</td>      <td>0.57</td>    </tr>    <tr>      <th>df_ptp_scaled_SGDRegressor</th>      <td>431.327997</td>      <td>296.658203</td>      <td>1109.082211</td>      <td>523.070154</td>      <td>0.53</td>    </tr>    <tr>      <th>df_ptp_scaled_SVR</th>      <td>460.650203</td>      <td>74.538799</td>      <td>1602.697324</td>      <td>108.952559</td>      <td>0.02</td>    </tr>    <tr>      <th>df_ptp_SVR</th>      <td>468.269915</td>      <td>74.917013</td>      <td>1609.844085</td>      <td>109.699051</td>      <td>0.02</td>    </tr>    <tr>      <th>df_ptp_scaled_PolynomialRegression</th>      <td>3225.788431</td>      <td>435.443024</td>      <td>32115.070449</td>      <td>1270.719623</td>      <td>-390.97</td>    </tr>    <tr>      <th>df_ptp_PolynomialRegression</th>      <td>4164.169854</td>      <td>456.612310</td>      <td>40048.254912</td>      <td>1343.158290</td>      <td>-608.54</td>    </tr>  </tbody></table>    
+            </div>
+        </div>
+
+        <hr class="mt-5"/>
+
+        <div class="row mt-3">
+            <div class="col-8">
+                <h2>References</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8" id="references-1">
+                <div class="alert alert-light" role="alert">
+                    Sanchez-Diaz,I.;Palacios-Argüello,L.;Levandi,A.;Mardberg,J;Basso R. A Time-Efficiency Study of Medium-Duty Trucks Delivering in Urban Environments: Göteborg,Sweden, 2020
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8" id="references-2">
+                <div class="alert alert-light" role="alert">
+                    Sander-Sebastian, V. Travel Time Prediction Based on Raw GPS Data: Tartu, 2019
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8" id="references-3">
+                <div class="alert alert-light" role="alert">
+                    Jean-François A., et al. Connecting to Compete 2016 Trade Logistics in the Global Economy The Logistics Performance Index and Its Indicators, 2016
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8" id="references-4">
+                <div class="alert alert-light" role="alert">
+                    Zheng W., Kun Fu, Jieping Ye. Learning to Estimate the Travel Time: London, 2018
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8" id="references-5">
+                <div class="alert alert-light" role="alert">
+                    <a href="https://ops.fhwa.dot.gov/publications/tt_reliability/TTR_Report.htm">Travel Time Reliability: Making It There On Time, All The Time</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8" id="references-6">
+                <div class="alert alert-light" role="alert">
+                    <a href="https://ops.fhwa.dot.gov/publications/tt_reliability/TTR_Report.htm">Travel Time Reliability: Making It There On Time, All The Time</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8" id="references-7">
+                <div class="alert alert-light" role="alert">
+                    <a href="https://360.here.com/2017/02/23/turning-left-may-not-right-drivers/">Why turning left may not be right for drivers</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8" id="references-8">
+                <div class="alert alert-light" role="alert">
+                    <a href="https://360.here.com/2017/02/23/turning-left-may-not-right-drivers/">Why turning left may not be right for drivers</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8" id="references-9">
+                <div class="alert alert-light" role="alert">
+                    <a href="https://blog.mapbox.com/matching-gps-traces-to-a-map-73730197d0e2">Matching GPS traces to a map</a>
+                </div>
+            </div>
+        </div>
+
+        
+
+        
     </div>
 </div>
 
-<div class="row">
-    <div class="container">
-        
+
+
+<div class="row mt-3">
+    <div class="container-fluid">
+        <figure class="figure">
+            <img src="{{ url_for('static', filename='intermission.jpg') }}" class="figure-img img-fluid rounded" alt="...">
+          </figure>
     </div>
 </div>
 
